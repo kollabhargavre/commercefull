@@ -11,7 +11,7 @@ const Login = () => {
       <form onSubmit={loginUser}>
         <input type="email" name="email" placeholder='Enter Email' required/>
         <input type="password" name="password" placeholder='Enter Password' required/>
-        <input type="submit" value="Login"/>
+        <input type="submit"/>
       </form>
       <p>Don't have an account Register <Link to='/register'>here</Link></p>
     </div>

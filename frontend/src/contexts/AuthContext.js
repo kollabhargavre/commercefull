@@ -12,29 +12,31 @@ export const AuthProvider = ({children})=>{
 
     const navigate =useNavigate();
 
-    let [authTokens, setAuthTokens] = useState([])
-    let [user, setUser] = useState([])
+    let [authTokens, setAuthTokens] = useState(()=>localStorage.getItem('authTokens')?JSON.parse(localStorage.getItem('authTokens')):null)
+    let [user, setUser] = useState(()=>localStorage.getItem('authTokens')?jwt_decode(localStorage.getItem('authTokens')):null)
 
     let loginUser = async(e)=>{
-        console.log("loggedin")
-        e.preventDetails();
-        let response = await axios.get('http://127.0.0.1:8000/token/',{
+        e.preventDefault()
+        let response = await axios.post('http://127.0.0.1:8000/token/',{
             'email':e.target.email.value,
-            'password':e.target.password.value
+           'password':e.target.password.value
         })
+        .catch(err=>alert(err))
         let data = await response.data
-        if(response.status === 200){
+        if(response.status===200){
             setAuthTokens(data)
             setUser(jwt_decode(data.access))
-            alert("login sucess")
-            navigate("/")
-            
+            localStorage.setItem('authTokens',JSON.stringify(data))
+            navigate('/')
+        }else{
+            alert("Something went wrong")
         }
         
     }
     let logoutUser =()=>{
         setAuthTokens(null)
         setUser(null)
+        localStorage.removeItem('authTokens')
         navigate("/login")
     }
 
