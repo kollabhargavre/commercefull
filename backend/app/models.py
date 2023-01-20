@@ -12,3 +12,12 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+
+class Post(models.Model):
+    user = models.ForeignKey(User,on_delete = models.CASCADE, related_name="posts")
+    description = models.TextField(null=True,blank=True)
+    image = models.ImageField(null=True,blank=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.createdAt}"
